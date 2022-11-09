@@ -34,16 +34,16 @@
 
 ## gqlgen開発手順
 
-1. スキーマを定義する
-    - `graph/schema.graphqls`
-2. テーブルを定義する
+1. テーブルを定義する
     - `db/schema/schema.sql`
-3. マイグレーションを実行する
+2. マイグレーションを実行する
     ```shell
     make migrate
     ```
-4. モデルを作成する
+3. モデルを作成する
     - `graph/model/[モデル名].go`
+4. スキーマを定義する
+    - `graph/schema.graphqls`
 5. (必要な場合) リゾルバーの設定を追加する
     - `gqlgen.yml`
 6. `generate` コマンドを実行する
