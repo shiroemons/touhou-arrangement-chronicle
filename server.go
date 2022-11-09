@@ -19,8 +19,8 @@ import (
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
 
-	"github.com/shiroemons/gqlgen-todos/graph"
-	"github.com/shiroemons/gqlgen-todos/graph/generated"
+	"github.com/shiroemons/touhou-arrangement-chronicle/graph"
+	"github.com/shiroemons/touhou-arrangement-chronicle/graph/generated"
 )
 
 const defaultPort = "8080"

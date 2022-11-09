@@ -1,4 +1,4 @@
-# gqlgen-todos
+# 東方編曲録　〜 Arrangement Chronicle
 
 ## 環境構築
 
