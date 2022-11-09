@@ -8,52 +8,33 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
-	"github.com/lucsky/cuid"
 	"github.com/shiroemons/touhou-arrangement-chronicle/graph/generated"
 	"github.com/shiroemons/touhou-arrangement-chronicle/graph/model"
 )
 
-// CreateTodo is the resolver for the createTodo field.
-func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	todo := &model.Todo{
-		ID:     cuid.New(),
-		Text:   input.Text,
-		UserID: input.UserID,
-	}
-	_, err := r.DB.NewInsert().Model(todo).Exec(ctx)
-	if err != nil {
-		return nil, err
-	}
-	return todo, nil
+// Product is the resolver for the product field.
+func (r *originalSongResolver) Product(ctx context.Context, obj *model.OriginalSong) (*model.Product, error) {
+	panic(fmt.Errorf("not implemented: Product - product"))
 }
 
-// Todos is the resolver for the todos field.
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	var todos []*model.Todo
-	err := r.DB.NewSelect().Model(&todos).Scan(ctx)
-	if err != nil {
-		return nil, err
-	}
-	return todos, nil
+// Products is the resolver for the products field.
+func (r *queryResolver) Products(ctx context.Context) ([]*model.Product, error) {
+	panic(fmt.Errorf("not implemented: Products - products"))
 }
 
-// User is the resolver for the user field.
-func (r *todoResolver) User(ctx context.Context, obj *model.Todo) (*model.User, error) {
-	return &model.User{ID: obj.UserID, Name: "user " + obj.UserID}, nil
+// OriginalSongs is the resolver for the originalSongs field.
+func (r *queryResolver) OriginalSongs(ctx context.Context) ([]*model.OriginalSong, error) {
+	panic(fmt.Errorf("not implemented: OriginalSongs - originalSongs"))
 }
 
-// Mutation returns generated.MutationResolver implementation.
-func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
+// OriginalSong returns generated.OriginalSongResolver implementation.
+func (r *Resolver) OriginalSong() generated.OriginalSongResolver { return &originalSongResolver{r} }
 
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
-// Todo returns generated.TodoResolver implementation.
-func (r *Resolver) Todo() generated.TodoResolver { return &todoResolver{r} }
-
-type mutationResolver struct{ *Resolver }
+type originalSongResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
-type todoResolver struct{ *Resolver }
 
 // !!! WARNING !!!
 // The code below was going to be deleted when updating resolvers. It has been copied here so you have
