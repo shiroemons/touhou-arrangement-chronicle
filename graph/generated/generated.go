@@ -49,17 +49,17 @@ type ComplexityRoot struct {
 		Composer    func(childComplexity int) int
 		Duplicate   func(childComplexity int) int
 		ID          func(childComplexity int) int
+		Name        func(childComplexity int) int
 		Product     func(childComplexity int) int
-		Title       func(childComplexity int) int
 		TrackNumber func(childComplexity int) int
 	}
 
 	Product struct {
 		ID           func(childComplexity int) int
+		Name         func(childComplexity int) int
 		ProductType  func(childComplexity int) int
 		SeriesNumber func(childComplexity int) int
-		ShortTitle   func(childComplexity int) int
-		Title        func(childComplexity int) int
+		ShortName    func(childComplexity int) int
 	}
 
 	Query struct {
@@ -119,19 +119,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OriginalSong.ID(childComplexity), true
 
+	case "OriginalSong.name":
+		if e.complexity.OriginalSong.Name == nil {
+			break
+		}
+
+		return e.complexity.OriginalSong.Name(childComplexity), true
+
 	case "OriginalSong.product":
 		if e.complexity.OriginalSong.Product == nil {
 			break
 		}
 
 		return e.complexity.OriginalSong.Product(childComplexity), true
-
-	case "OriginalSong.title":
-		if e.complexity.OriginalSong.Title == nil {
-			break
-		}
-
-		return e.complexity.OriginalSong.Title(childComplexity), true
 
 	case "OriginalSong.trackNumber":
 		if e.complexity.OriginalSong.TrackNumber == nil {
@@ -147,6 +147,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Product.ID(childComplexity), true
 
+	case "Product.name":
+		if e.complexity.Product.Name == nil {
+			break
+		}
+
+		return e.complexity.Product.Name(childComplexity), true
+
 	case "Product.productType":
 		if e.complexity.Product.ProductType == nil {
 			break
@@ -161,19 +168,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Product.SeriesNumber(childComplexity), true
 
-	case "Product.shortTitle":
-		if e.complexity.Product.ShortTitle == nil {
+	case "Product.shortName":
+		if e.complexity.Product.ShortName == nil {
 			break
 		}
 
-		return e.complexity.Product.ShortTitle(childComplexity), true
-
-	case "Product.title":
-		if e.complexity.Product.Title == nil {
-			break
-		}
-
-		return e.complexity.Product.Title(childComplexity), true
+		return e.complexity.Product.ShortName(childComplexity), true
 
 	case "Query.originalSongs":
 		if e.complexity.Query.OriginalSongs == nil {
@@ -247,8 +247,8 @@ var sources = []*ast.Source{
 
 type Product {
   id: ID!
-  title: String!
-  shortTitle: String!
+  name: String!
+  shortName: String!
   productType: String!
   seriesNumber: Float!
 }
@@ -256,7 +256,7 @@ type Product {
 type OriginalSong {
   id: ID!
   product: Product!
-  title: String!
+  name: String!
   composer: String!
   arranger: String!
   trackNumber: Int!
@@ -413,10 +413,10 @@ func (ec *executionContext) fieldContext_OriginalSong_product(ctx context.Contex
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Product_id(ctx, field)
-			case "title":
-				return ec.fieldContext_Product_title(ctx, field)
-			case "shortTitle":
-				return ec.fieldContext_Product_shortTitle(ctx, field)
+			case "name":
+				return ec.fieldContext_Product_name(ctx, field)
+			case "shortName":
+				return ec.fieldContext_Product_shortName(ctx, field)
 			case "productType":
 				return ec.fieldContext_Product_productType(ctx, field)
 			case "seriesNumber":
@@ -428,8 +428,8 @@ func (ec *executionContext) fieldContext_OriginalSong_product(ctx context.Contex
 	return fc, nil
 }
 
-func (ec *executionContext) _OriginalSong_title(ctx context.Context, field graphql.CollectedField, obj *model.OriginalSong) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_OriginalSong_title(ctx, field)
+func (ec *executionContext) _OriginalSong_name(ctx context.Context, field graphql.CollectedField, obj *model.OriginalSong) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OriginalSong_name(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -442,7 +442,7 @@ func (ec *executionContext) _OriginalSong_title(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Title, nil
+		return obj.Name, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -459,7 +459,7 @@ func (ec *executionContext) _OriginalSong_title(ctx context.Context, field graph
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_OriginalSong_title(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_OriginalSong_name(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "OriginalSong",
 		Field:      field,
@@ -692,8 +692,8 @@ func (ec *executionContext) fieldContext_Product_id(ctx context.Context, field g
 	return fc, nil
 }
 
-func (ec *executionContext) _Product_title(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Product_title(ctx, field)
+func (ec *executionContext) _Product_name(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Product_name(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -706,7 +706,7 @@ func (ec *executionContext) _Product_title(ctx context.Context, field graphql.Co
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Title, nil
+		return obj.Name, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -723,7 +723,7 @@ func (ec *executionContext) _Product_title(ctx context.Context, field graphql.Co
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Product_title(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Product_name(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Product",
 		Field:      field,
@@ -736,8 +736,8 @@ func (ec *executionContext) fieldContext_Product_title(ctx context.Context, fiel
 	return fc, nil
 }
 
-func (ec *executionContext) _Product_shortTitle(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Product_shortTitle(ctx, field)
+func (ec *executionContext) _Product_shortName(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Product_shortName(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -750,7 +750,7 @@ func (ec *executionContext) _Product_shortTitle(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ShortTitle, nil
+		return obj.ShortName, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -767,7 +767,7 @@ func (ec *executionContext) _Product_shortTitle(ctx context.Context, field graph
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Product_shortTitle(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Product_shortName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Product",
 		Field:      field,
@@ -909,10 +909,10 @@ func (ec *executionContext) fieldContext_Query_products(ctx context.Context, fie
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Product_id(ctx, field)
-			case "title":
-				return ec.fieldContext_Product_title(ctx, field)
-			case "shortTitle":
-				return ec.fieldContext_Product_shortTitle(ctx, field)
+			case "name":
+				return ec.fieldContext_Product_name(ctx, field)
+			case "shortName":
+				return ec.fieldContext_Product_shortName(ctx, field)
 			case "productType":
 				return ec.fieldContext_Product_productType(ctx, field)
 			case "seriesNumber":
@@ -967,8 +967,8 @@ func (ec *executionContext) fieldContext_Query_originalSongs(ctx context.Context
 				return ec.fieldContext_OriginalSong_id(ctx, field)
 			case "product":
 				return ec.fieldContext_OriginalSong_product(ctx, field)
-			case "title":
-				return ec.fieldContext_OriginalSong_title(ctx, field)
+			case "name":
+				return ec.fieldContext_OriginalSong_name(ctx, field)
 			case "composer":
 				return ec.fieldContext_OriginalSong_composer(ctx, field)
 			case "arranger":
@@ -2931,9 +2931,9 @@ func (ec *executionContext) _OriginalSong(ctx context.Context, sel ast.Selection
 				return innerFunc(ctx)
 
 			})
-		case "title":
+		case "name":
 
-			out.Values[i] = ec._OriginalSong_title(ctx, field, obj)
+			out.Values[i] = ec._OriginalSong_name(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&invalids, 1)
@@ -2994,16 +2994,16 @@ func (ec *executionContext) _Product(ctx context.Context, sel ast.SelectionSet, 
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "title":
+		case "name":
 
-			out.Values[i] = ec._Product_title(ctx, field, obj)
+			out.Values[i] = ec._Product_name(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "shortTitle":
+		case "shortName":
 
-			out.Values[i] = ec._Product_shortTitle(ctx, field, obj)
+			out.Values[i] = ec._Product_shortName(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++

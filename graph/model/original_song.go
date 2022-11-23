@@ -7,7 +7,7 @@ type OriginalSong struct {
 
 	ID          string   `json:"id" bun:",pk"`
 	Product     *Product `json:"product"`
-	Title       string   `json:"title" bun:"title"`
+	Name        string   `json:"name" bun:"name"`
 	Composer    string   `json:"composer" bun:"composer"`
 	Arranger    string   `json:"arranger" bun:"arranger"`
 	TrackNumber int      `json:"trackNumber" bun:"track_number"`

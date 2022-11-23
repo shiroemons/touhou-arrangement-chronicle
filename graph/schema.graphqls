@@ -4,8 +4,8 @@
 
 type Product {
   id: ID!
-  title: String!
-  shortTitle: String!
+  name: String!
+  shortName: String!
   productType: String!
   seriesNumber: Float!
 }
@@ -13,7 +13,7 @@ type Product {
 type OriginalSong {
   id: ID!
   product: Product!
-  title: String!
+  name: String!
   composer: String!
   arranger: String!
   trackNumber: Int!

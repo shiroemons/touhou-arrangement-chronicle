@@ -6,8 +6,8 @@ type Product struct {
 	bun.BaseModel `bun:"table:products,alias:p"`
 
 	ID           string  `json:"id" bun:",pk"`
-	Title        string  `json:"title" bun:"text"`
-	ShortTitle   string  `json:"shortTitle" bun:"short_title"`
+	Name         string  `json:"name" bun:"name"`
+	ShortName    string  `json:"shortName" bun:"short_name"`
 	ProductType  string  `json:"productType" bun:"product_type"`
 	SeriesNumber float64 `json:"seriesNumber" bun:"series_number"`
 }
