@@ -53,7 +53,7 @@ func main() {
 	importOriginalSongs(ctx, db)
 }
 
-func importProducts(ctx context.Context, db *bun.DB) {
+func importProducts(ctx context.Context, db *database.DB) {
 	log.Println("start products import.")
 
 	f, err := os.Open("./data/products.tsv")
@@ -81,7 +81,7 @@ func importProducts(ctx context.Context, db *bun.DB) {
 	log.Println("finish products import.")
 }
 
-func importOriginalSongs(ctx context.Context, db *bun.DB) {
+func importOriginalSongs(ctx context.Context, db *database.DB) {
 	log.Println("start original_songs import.")
 
 	f, err := os.Open("./data/original_songs.tsv")

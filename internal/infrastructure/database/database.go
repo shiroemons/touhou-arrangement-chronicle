@@ -12,7 +12,11 @@ import (
 	"github.com/uptrace/bun/extra/bundebug"
 )
 
-func New() *bun.DB {
+type DB struct {
+	*bun.DB
+}
+
+func New() *DB {
 	config, err := pgx.ParseConfig(os.Getenv("CONNECT_URL"))
 	if err != nil {
 		panic(err)
@@ -36,5 +40,5 @@ func New() *bun.DB {
 	}
 	log.Println(v)
 
-	return db
+	return &DB{db}
 }

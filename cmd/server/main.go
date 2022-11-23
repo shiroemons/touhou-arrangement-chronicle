@@ -14,7 +14,6 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/uptrace/bun"
 
 	"github.com/shiroemons/touhou-arrangement-chronicle/graph/generated"
 	"github.com/shiroemons/touhou-arrangement-chronicle/graph/resolver"
@@ -23,7 +22,7 @@ import (
 
 const defaultPort = "8080"
 
-func graphqlHandler(db *bun.DB) gin.HandlerFunc {
+func graphqlHandler(db *database.DB) gin.HandlerFunc {
 	// NewExecutableSchema and Config are in the generated.go file
 	// Resolver is in the resolver.go file
 	h := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &resolver.Resolver{DB: db}}))
