@@ -9,15 +9,13 @@
 2. DB のセットアップ
    - 2.1. DBを起動する
      ```shell
-     make database-up
+     make db-up
      ```
-   - 2.2. 別のシェルでマイグレーションを実行する
+   - 2.2. マイグレーションを実行する
      ```shell
      make migrate
      ```
-   - 2.3. DBを停止する
-     - `Ctrl` + `C`
-   - 2.4. シーダーを実行する(DBに初期値を入れる)
+   - 2.3. シーダーを実行する(DBに初期値を入れる)
      ```shell
      make seeder
      ```
