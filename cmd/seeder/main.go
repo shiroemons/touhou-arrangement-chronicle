@@ -48,11 +48,13 @@ func main() {
 	}
 	gocsv.SetCSVReader(fn)
 
-	products(ctx, db)
-	originalSongs(ctx, db)
+	importProducts(ctx, db)
+	importOriginalSongs(ctx, db)
 }
 
-func products(ctx context.Context, db *bun.DB) {
+func importProducts(ctx context.Context, db *bun.DB) {
+	log.Println("start products import.")
+
 	f, err := os.Open("./data/products.tsv")
 	if err != nil {
 		log.Fatal(err)
@@ -74,9 +76,13 @@ func products(ctx context.Context, db *bun.DB) {
 	if err != nil {
 		panic(err)
 	}
+
+	log.Println("finish products import.")
 }
 
-func originalSongs(ctx context.Context, db *bun.DB) {
+func importOriginalSongs(ctx context.Context, db *bun.DB) {
+	log.Println("start original_songs import.")
+
 	f, err := os.Open("./data/original_songs.tsv")
 	if err != nil {
 		log.Fatal(err)
@@ -100,4 +106,6 @@ func originalSongs(ctx context.Context, db *bun.DB) {
 	if err != nil {
 		panic(err)
 	}
+
+	log.Println("finish original_songs import.")
 }
