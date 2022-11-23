@@ -16,8 +16,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/uptrace/bun"
 
-	"github.com/shiroemons/touhou-arrangement-chronicle/graph"
 	"github.com/shiroemons/touhou-arrangement-chronicle/graph/generated"
+	"github.com/shiroemons/touhou-arrangement-chronicle/graph/resolver"
 	"github.com/shiroemons/touhou-arrangement-chronicle/internal/infrastructure/database"
 )
 
@@ -26,7 +26,7 @@ const defaultPort = "8080"
 func graphqlHandler(db *bun.DB) gin.HandlerFunc {
 	// NewExecutableSchema and Config are in the generated.go file
 	// Resolver is in the resolver.go file
-	h := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{DB: db}}))
+	h := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &resolver.Resolver{DB: db}}))
 
 	return func(c *gin.Context) {
 		h.ServeHTTP(c.Writer, c.Request)
