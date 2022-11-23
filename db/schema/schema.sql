@@ -1,8 +1,17 @@
+create type product_type as enum (
+    'pc98',
+    'windows',
+    'zuns_music_collection',
+    'akyus_untouched_score',
+    'commercial_books',
+    'other'
+);
+
 create table products (
     id            text                     not null primary key,
     name          text                     not null,
     short_name    text                     not null,
-    product_type  text                     not null,
+    product_type  product_type             not null,
     series_number numeric(5,2)             not null,
     created_at    timestamp with time zone not null default current_timestamp,
     updated_at    timestamp with time zone not null default current_timestamp
