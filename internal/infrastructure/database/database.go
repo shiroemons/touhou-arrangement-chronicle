@@ -9,6 +9,7 @@ import (
 	"github.com/jackc/pgx/v5/stdlib"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
+	"github.com/uptrace/bun/extra/bundebug"
 )
 
 func New() *bun.DB {
@@ -19,6 +20,15 @@ func New() *bun.DB {
 
 	sqldb := stdlib.OpenDB(*config)
 	db := bun.NewDB(sqldb, pgdialect.New())
+
+	db.AddQueryHook(bundebug.NewQueryHook(
+		// disable the hook
+		bundebug.WithEnabled(false),
+
+		// BUNDEBUG=1 logs failed queries
+		// BUNDEBUG=2 logs all queries
+		bundebug.FromEnv("BUNDEBUG"),
+	))
 
 	var v string
 	if err = db.NewSelect().ColumnExpr("version()").Scan(context.Background(), &v); err != nil {

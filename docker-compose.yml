@@ -41,6 +41,7 @@ services:
       - extra
     environment:
       CONNECT_URL: "postgres://postgres:@db:5432/touhou_arrangement_chronicle?sslmode=disable"
+      BUNDEBUG: 2
     volumes:
       - .:/app
 
@@ -56,6 +57,7 @@ services:
       - '8080:8080'
     environment:
       CONNECT_URL: "postgres://postgres:@db:5432/touhou_arrangement_chronicle?sslmode=disable"
+      BUNDEBUG: 2
     volumes:
       - .:/app
 

@@ -39,6 +39,7 @@ type OriginalSong struct {
 func main() {
 	ctx := context.Background()
 	db := database.New()
+	defer db.Close()
 
 	fn := func(in io.Reader) gocsv.CSVReader {
 		r := csv.NewReader(bom.NewReader(in)) // BOMの回避

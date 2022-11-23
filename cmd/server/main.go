@@ -14,6 +14,8 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/uptrace/bun"
+
 	"github.com/shiroemons/touhou-arrangement-chronicle/graph"
 	"github.com/shiroemons/touhou-arrangement-chronicle/graph/generated"
 	"github.com/shiroemons/touhou-arrangement-chronicle/internal/infrastructure/database"
@@ -21,8 +23,7 @@ import (
 
 const defaultPort = "8080"
 
-func graphqlHandler() gin.HandlerFunc {
-	db := database.New()
+func graphqlHandler(db *bun.DB) gin.HandlerFunc {
 	// NewExecutableSchema and Config are in the generated.go file
 	// Resolver is in the resolver.go file
 	h := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{DB: db}}))
@@ -50,6 +51,9 @@ func GinContextToContextMiddleware() gin.HandlerFunc {
 }
 
 func main() {
+	db := database.New()
+	defer db.Close()
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
@@ -66,7 +70,7 @@ func main() {
 	router.GET("/ping", func(c *gin.Context) {
 		c.String(http.StatusOK, "pong")
 	})
-	router.POST("/query", graphqlHandler())
+	router.POST("/query", graphqlHandler(db))
 	router.GET("/", playgroundHandler())
 
 	srv := &http.Server{
