@@ -6,7 +6,9 @@ require (
 	github.com/99designs/gqlgen v0.17.20
 	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.8.1
+	github.com/gocarina/gocsv v0.0.0-20221105105431-c8ef78125b99
 	github.com/jackc/pgx/v5 v5.0.4
+	github.com/spkg/bom v1.0.0
 	github.com/uptrace/bun v1.1.8
 	github.com/uptrace/bun/dialect/pgdialect v1.1.8
 	github.com/vektah/gqlparser/v2 v2.5.1
