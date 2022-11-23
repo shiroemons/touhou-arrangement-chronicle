@@ -16,6 +16,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/shiroemons/touhou-arrangement-chronicle/graph/generated"
+	"github.com/shiroemons/touhou-arrangement-chronicle/graph/loader"
 	"github.com/shiroemons/touhou-arrangement-chronicle/graph/resolver"
 	"github.com/shiroemons/touhou-arrangement-chronicle/internal/infrastructure/database"
 	"github.com/shiroemons/touhou-arrangement-chronicle/internal/repository"
@@ -63,8 +64,9 @@ func main() {
 		port = defaultPort
 	}
 
+	ldrs := loader.NewLoaders(db)
 	router := gin.Default()
-
+	router.Use(loader.Middleware(ldrs))
 	router.Use(GinContextToContextMiddleware())
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:" + port},

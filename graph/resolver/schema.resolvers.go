@@ -8,13 +8,23 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
+
 	"github.com/shiroemons/touhou-arrangement-chronicle/graph/generated"
+	"github.com/shiroemons/touhou-arrangement-chronicle/graph/loader"
 	"github.com/shiroemons/touhou-arrangement-chronicle/graph/model"
 )
 
 // Product is the resolver for the product field.
 func (r *originalSongResolver) Product(ctx context.Context, obj *model.OriginalSong) (*model.Product, error) {
-	panic(fmt.Errorf("not implemented: Product - product"))
+	if obj.Product != nil {
+		return obj.Product, nil
+	}
+
+	product, err := loader.LoadProduct(ctx, obj.ProductID)
+	if err != nil {
+		return nil, err
+	}
+	return product, nil
 }
 
 // Products is the resolver for the products field.

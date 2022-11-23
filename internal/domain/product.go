@@ -8,4 +8,5 @@ import (
 
 type Product interface {
 	All(ctx context.Context) ([]*model.Product, error)
+	GetMapInIDs(ctx context.Context, ids []string) (map[string]*model.Product, error)
 }
