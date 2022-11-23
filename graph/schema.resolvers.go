@@ -19,12 +19,22 @@ func (r *originalSongResolver) Product(ctx context.Context, obj *model.OriginalS
 
 // Products is the resolver for the products field.
 func (r *queryResolver) Products(ctx context.Context) ([]*model.Product, error) {
-	panic(fmt.Errorf("not implemented: Products - products"))
+	products := make([]*model.Product, 0)
+	err := r.DB.NewSelect().Model(&products).Order("id ASC").Scan(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return products, nil
 }
 
 // OriginalSongs is the resolver for the originalSongs field.
 func (r *queryResolver) OriginalSongs(ctx context.Context) ([]*model.OriginalSong, error) {
-	panic(fmt.Errorf("not implemented: OriginalSongs - originalSongs"))
+	originalSongs := make([]*model.OriginalSong, 0)
+	err := r.DB.NewSelect().Model(&originalSongs).Order("id ASC").Scan(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return originalSongs, nil
 }
 
 // OriginalSong returns generated.OriginalSongResolver implementation.
