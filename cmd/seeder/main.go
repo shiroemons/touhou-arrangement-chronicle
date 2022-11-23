@@ -1,34 +1,45 @@
 package main
 
 import (
+	"context"
 	"encoding/csv"
-	"fmt"
-	"github.com/gocarina/gocsv"
-	"github.com/spkg/bom"
 	"io"
 	"log"
 	"os"
+
+	"github.com/gocarina/gocsv"
+	"github.com/spkg/bom"
+	"github.com/uptrace/bun"
+
+	"github.com/shiroemons/touhou-arrangement-chronicle/internal/infrastructure/database"
 )
 
 type Product struct {
-	ID           string `csv:"id"`
-	Name         string `csv:"name"`
-	ShortName    string `csv:"short_name"`
-	ProductType  string `csv:"product_type"`
-	SeriesNumber string `csv:"series_number"`
+	bun.BaseModel `bun:"table:products,alias:p"`
+
+	ID           string  `csv:"id" bun:",pk"`
+	Name         string  `csv:"name" bun:"name,nullzero,notnull"`
+	ShortName    string  `csv:"short_name" bun:"short_name,nullzero,notnull"`
+	ProductType  string  `csv:"product_type" bun:"product_type,nullzero,notnull"`
+	SeriesNumber float64 `csv:"series_number" bun:"series_number,nullzero,notnull"`
 }
 
 type OriginalSong struct {
-	ID          string `csv:"id"`
-	ProductID   string `csv:"product_id"`
-	Name        string `csv:"name"`
-	Composer    string `csv:"composer"`
-	Arranger    string `csv:"arranger"`
-	TrackNumber int64  `csv:"track_number"`
-	Duplicate   bool   `csv:"is_duplicate"`
+	bun.BaseModel `bun:"table:original_songs,alias:os"`
+
+	ID          string `csv:"id" bun:",pk"`
+	ProductID   string `csv:"product_id" bun:"product_id,nullzero,notnull"`
+	Name        string `csv:"name" bun:"name,nullzero,notnull"`
+	Composer    string `csv:"composer" bun:"composer,nullzero,notnull,default:''"`
+	Arranger    string `csv:"arranger" bun:"arranger,nullzero,notnull,default:''"`
+	TrackNumber int    `csv:"track_number" bun:"track_number,nullzero,notnull"`
+	Duplicate   bool   `csv:"is_duplicate" bun:"is_duplicate,notnull"`
 }
 
 func main() {
+	ctx := context.Background()
+	db := database.New()
+
 	fn := func(in io.Reader) gocsv.CSVReader {
 		r := csv.NewReader(bom.NewReader(in)) // BOMの回避
 		r.Comma = '\t'                        // 区切り文字をタブに変更
@@ -37,11 +48,11 @@ func main() {
 	}
 	gocsv.SetCSVReader(fn)
 
-	products()
-	originalSongs()
+	products(ctx, db)
+	originalSongs(ctx, db)
 }
 
-func products() {
+func products(ctx context.Context, db *bun.DB) {
 	f, err := os.Open("./data/products.tsv")
 	if err != nil {
 		log.Fatal(err)
@@ -53,12 +64,19 @@ func products() {
 		log.Fatal(err)
 	}
 
-	for _, v := range lines {
-		fmt.Printf("%+v\n", v)
+	_, err = db.NewInsert().Model(&lines).
+		On("CONFLICT (id) DO UPDATE").
+		Set("name = EXCLUDED.name").
+		Set("short_name = EXCLUDED.short_name").
+		Set("product_type = EXCLUDED.product_type").
+		Set("series_number = EXCLUDED.series_number").
+		Exec(ctx)
+	if err != nil {
+		panic(err)
 	}
 }
 
-func originalSongs() {
+func originalSongs(ctx context.Context, db *bun.DB) {
 	f, err := os.Open("./data/original_songs.tsv")
 	if err != nil {
 		log.Fatal(err)
@@ -70,7 +88,16 @@ func originalSongs() {
 		log.Fatal(err)
 	}
 
-	for _, v := range lines {
-		fmt.Printf("%+v\n", v)
+	_, err = db.NewInsert().Model(&lines).
+		On("CONFLICT (id) DO UPDATE").
+		Set("product_id = EXCLUDED.product_id").
+		Set("name = EXCLUDED.name").
+		Set("composer = EXCLUDED.composer").
+		Set("arranger = EXCLUDED.arranger").
+		Set("track_number = EXCLUDED.track_number").
+		Set("is_duplicate = EXCLUDED.is_duplicate").
+		Exec(ctx)
+	if err != nil {
+		panic(err)
 	}
 }

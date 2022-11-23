@@ -1,4 +1,4 @@
-.PHONY: help init build build-local db-up up down logs ps test migrate generate all-clean
+.PHONY: help init build build-local db-up up down logs ps test migrate seeder generate all-clean
 .DEFAULT_GOAL := help
 
 DOCKER_TAG := latest
@@ -33,6 +33,9 @@ test: ## Execute tests
 
 migrate: ## db migrate
 	docker compose run --rm migrate
+
+seeder: ## db seed
+	docker compose run --rm seeder
 
 generate: ## Run go generate ./...
 	docker compose run server go generate ./...
