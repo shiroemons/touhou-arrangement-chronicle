@@ -6,7 +6,8 @@ type OriginalSong struct {
 	bun.BaseModel `bun:"table:original_songs,alias:os"`
 
 	ID          string   `json:"id" bun:",pk"`
-	Product     *Product `json:"product"`
+	ProductID   string   `json:"productID" bun:"product_id"`
+	Product     *Product `json:"product" bun:"-"`
 	Name        string   `json:"name" bun:"name"`
 	Composer    string   `json:"composer" bun:"composer"`
 	Arranger    string   `json:"arranger" bun:"arranger"`

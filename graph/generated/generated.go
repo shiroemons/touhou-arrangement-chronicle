@@ -245,11 +245,20 @@ var sources = []*ast.Source{
 #
 # https://gqlgen.com/getting-started/
 
+enum ProductType {
+  pc98
+  windows
+  zuns_music_collection
+  akyus_untouched_score
+  commercial_books
+  other
+}
+
 type Product {
   id: ID!
   name: String!
   shortName: String!
-  productType: String!
+  productType: ProductType!
   seriesNumber: Float!
 }
 
@@ -806,9 +815,9 @@ func (ec *executionContext) _Product_productType(ctx context.Context, field grap
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(model.ProductType)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalNProductType2githubᚗcomᚋshiroemonsᚋtouhouᚑarrangementᚑchronicleᚋgraphᚋmodelᚐProductType(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Product_productType(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -818,7 +827,7 @@ func (ec *executionContext) fieldContext_Product_productType(ctx context.Context
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
+			return nil, errors.New("field of type ProductType does not have child fields")
 		},
 	}
 	return fc, nil
@@ -3609,6 +3618,16 @@ func (ec *executionContext) marshalNProduct2ᚖgithubᚗcomᚋshiroemonsᚋtouho
 		return graphql.Null
 	}
 	return ec._Product(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNProductType2githubᚗcomᚋshiroemonsᚋtouhouᚑarrangementᚑchronicleᚋgraphᚋmodelᚐProductType(ctx context.Context, v interface{}) (model.ProductType, error) {
+	var res model.ProductType
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNProductType2githubᚗcomᚋshiroemonsᚋtouhouᚑarrangementᚑchronicleᚋgraphᚋmodelᚐProductType(ctx context.Context, sel ast.SelectionSet, v model.ProductType) graphql.Marshaler {
+	return v
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {

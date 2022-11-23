@@ -2,11 +2,20 @@
 #
 # https://gqlgen.com/getting-started/
 
+enum ProductType {
+  pc98
+  windows
+  zuns_music_collection
+  akyus_untouched_score
+  commercial_books
+  other
+}
+
 type Product {
   id: ID!
   name: String!
   shortName: String!
-  productType: String!
+  productType: ProductType!
   seriesNumber: Float!
 }
 
