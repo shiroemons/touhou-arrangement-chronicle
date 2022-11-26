@@ -11,3 +11,6 @@ type Product struct {
 	ProductType  ProductType `json:"productType" bun:"product_type"`
 	SeriesNumber float64     `json:"seriesNumber" bun:"series_number"`
 }
+
+func (Product) IsNode()            {}
+func (this Product) GetID() string { return this.ID }

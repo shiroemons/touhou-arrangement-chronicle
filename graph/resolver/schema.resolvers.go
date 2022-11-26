@@ -5,6 +5,7 @@ package resolver
 
 import (
 	"context"
+	"encoding/base64"
 	"fmt"
 
 	"github.com/gin-gonic/gin"
@@ -13,6 +14,13 @@ import (
 	"github.com/shiroemons/touhou-arrangement-chronicle/graph/loader"
 	"github.com/shiroemons/touhou-arrangement-chronicle/graph/model"
 )
+
+// ID is the resolver for the id field.
+func (r *originalSongResolver) ID(ctx context.Context, obj *model.OriginalSong) (string, error) {
+	globalID := fmt.Sprintf("%s:%s", "OriginalSong", obj.ID)
+	encGlobalID := base64.StdEncoding.EncodeToString([]byte(globalID))
+	return encGlobalID, nil
+}
 
 // Product is the resolver for the product field.
 func (r *originalSongResolver) Product(ctx context.Context, obj *model.OriginalSong) (*model.Product, error) {
@@ -25,6 +33,13 @@ func (r *originalSongResolver) Product(ctx context.Context, obj *model.OriginalS
 		return nil, err
 	}
 	return product, nil
+}
+
+// ID is the resolver for the id field.
+func (r *productResolver) ID(ctx context.Context, obj *model.Product) (string, error) {
+	globalID := fmt.Sprintf("%s:%s", "Product", obj.ID)
+	encGlobalID := base64.StdEncoding.EncodeToString([]byte(globalID))
+	return encGlobalID, nil
 }
 
 // Products is the resolver for the products field.
@@ -40,10 +55,14 @@ func (r *queryResolver) OriginalSongs(ctx context.Context) ([]*model.OriginalSon
 // OriginalSong returns generated.OriginalSongResolver implementation.
 func (r *Resolver) OriginalSong() generated.OriginalSongResolver { return &originalSongResolver{r} }
 
+// Product returns generated.ProductResolver implementation.
+func (r *Resolver) Product() generated.ProductResolver { return &productResolver{r} }
+
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
 type originalSongResolver struct{ *Resolver }
+type productResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
 
 // !!! WARNING !!!

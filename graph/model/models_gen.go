@@ -8,6 +8,11 @@ import (
 	"strconv"
 )
 
+type Node interface {
+	IsNode()
+	GetID() string
+}
+
 type ProductType string
 
 const (

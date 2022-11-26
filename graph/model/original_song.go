@@ -14,3 +14,6 @@ type OriginalSong struct {
 	TrackNumber int      `json:"trackNumber" bun:"track_number"`
 	Duplicate   bool     `json:"duplicate" bun:"is_duplicate"`
 }
+
+func (OriginalSong) IsNode()            {}
+func (this OriginalSong) GetID() string { return this.ID }
